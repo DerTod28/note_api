@@ -1,12 +1,15 @@
 import collections
+import uuid
 from typing import Any, Optional
 
+from fastapi import Depends, HTTPException, status
 from sqlalchemy import Row
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.api.v1.users import User
 from app.schemas.users import UserCreate
+from app.utils.auth import JWTBearer, decodeJWT
 from app.utils.password_hash import hash_password
 
 
@@ -16,11 +19,17 @@ class UserService:
         result = await session.execute(statement)
         return result.all()
 
+    async def get_user_by_uid(self, user_uid: uuid.UUID, session: AsyncSession) -> Row[Any]:
+        statement = select(User).where(User.uid == user_uid)
+        result = await session.execute(statement)
+        user = result.scalar_one()
+        return user if user is not None else None
+
     async def get_user(self, username: str, session: AsyncSession) -> Optional[Any]:
         statement = select(User).where(User.username == username)
         result = await session.execute(statement)
-        note = result.first()
-        return note if note is not None else None
+        user = result.first()
+        return user if user is not None else None
 
     async def username_exists(self, username: str, session: AsyncSession) -> Optional[bool]:
         statement = select(User).where(User.username == username)
@@ -37,3 +46,22 @@ class UserService:
         session.add(new_user)
         await session.commit()
         return new_user
+
+    async def get_current_user_uid(self, token: str = Depends(JWTBearer())) -> User:
+        """
+        Get current user from JWT token
+        """
+        payload = decodeJWT(token)
+        if not payload:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid token or expired token',
+            )
+        user_uid = payload.get('sub')
+
+        if not user_uid:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid token or expired token',
+            )
+        return user_uid

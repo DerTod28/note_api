@@ -1,12 +1,18 @@
 import collections
+import uuid
+from typing import Any
 
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
-from app.schemas.users import UserCreate
+from app.schemas.users import CurrentUser, UserCreate
 from app.services.users_service import UserService
 from app.utils.exceptions import ApiExceptionsError
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 router = APIRouter(
     prefix='/users',
@@ -30,3 +36,14 @@ async def create_user(
 
 
 # /users/me
+@router.get('/me', response_model=CurrentUser, description='Текущий пользователь - JWT TOKEN из /login')
+async def read_users_me(
+    token: str = Depends(oauth2_scheme),
+    current_user_uid: uuid.UUID = Depends(user_service.get_current_user_uid),
+    session: AsyncSession = Depends(get_session),
+) -> Row[Any]:
+    """
+    Get current user details
+    """
+    cur_user = await user_service.get_user_by_uid(current_user_uid, session)  # type: ignore[arg-type]
+    return cur_user

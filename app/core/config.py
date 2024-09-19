@@ -16,7 +16,11 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = Field(alias='POSTGRES_PASSWORD')
     POSTGRES_DB: str = Field(alias='POSTGRES_DB')
 
-    AUTHJWT_SECRET_KEY: str = Field(alias='AUTHJWT_SECRET_KEY')
+    SECRET_KEY: str = Field(alias='SECRET_KEY')
+    REFERSH_SECRET_KEY: str = Field(alias='REFERSH_SECRET_KEY')
+    ALOGRITHM: str = Field(alias='ALOGRITHM')
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(alias='ACCESS_TOKEN_EXPIRE_MINUTES')
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = Field(alias='REFRESH_TOKEN_EXPIRE_MINUTES')
 
     class Config:
         env_file = os.path.join(BASE_DIR, '.env')

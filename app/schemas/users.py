@@ -4,12 +4,10 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class User(BaseModel):
+class CurrentUser(BaseModel):
     uid: uuid.UUID
     username: str
-    password: str
-    create_at: datetime
-    updated_at: datetime
+    created_at: datetime
 
 
 class UserCreate(BaseModel):
