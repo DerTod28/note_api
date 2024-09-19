@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(alias='ACCESS_TOKEN_EXPIRE_MINUTES')
     REFRESH_TOKEN_EXPIRE_MINUTES: int = Field(alias='REFRESH_TOKEN_EXPIRE_MINUTES')
 
+    CELERY_HOST: str = Field(alias='CELERY_HOST', default='localhost')  # default
+    CELERY_PORT: str = Field(alias='CELERY_PORT', default=6379)  # default
+
     class Config:
         env_file = os.path.join(BASE_DIR, '.env')
         env_file_encoding = 'utf-8'
@@ -35,3 +38,7 @@ def get_db_url() -> str:
         f'postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@'
         f'{settings.POSTGRES_SERVER}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}'
     )
+
+
+def get_redis_url() -> str:
+    return f'redis://{settings.CELERY_HOST}:{settings.CELERY_PORT}'

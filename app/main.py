@@ -1,3 +1,4 @@
+# import aioredis
 from fastapi import FastAPI
 
 from app.database import init_db

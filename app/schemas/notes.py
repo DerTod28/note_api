@@ -16,4 +16,3 @@ class Note(BaseModel):
 class NoteCreate(BaseModel):
     title: str
     content: str
-    to_user_uid: uuid.UUID

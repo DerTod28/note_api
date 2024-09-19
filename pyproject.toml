@@ -19,6 +19,9 @@ python-jose = "^3.3.0"
 passlib = {version = "^1.7.4", extras = ["bcrypt"]}
 sqlmodel = "^0.0.22"
 humps = "^0.2.2"
+celery = "^5.4.0"
+pyjwt = "^2.9.0"
+redis = "^5.0.8"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.7.0"

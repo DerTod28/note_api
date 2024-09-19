@@ -3,7 +3,7 @@ from typing import Any, Mapping, Optional, Union
 
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import jwt
+from jose import jwt as jost_jwt
 from jwt import InvalidTokenError
 
 from app.core.config import settings
@@ -18,7 +18,7 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[int] =
         )
 
     to_encode = {'exp': expires_delta, 'sub': str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, settings.ALOGRITHM)
+    encoded_jwt = jost_jwt.encode(to_encode, settings.SECRET_KEY, settings.ALOGRITHM)
     return encoded_jwt
 
 
@@ -31,13 +31,13 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: Optional[int] 
         )
 
     to_encode = {'exp': expires_delta, 'sub': str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.REFERSH_SECRET_KEY, settings.ALOGRITHM)
+    encoded_jwt = jost_jwt.encode(to_encode, settings.REFERSH_SECRET_KEY, settings.ALOGRITHM)
     return encoded_jwt
 
 
 def decodeJWT(jwtoken: str) -> Optional[Mapping[Any, Any]]:
     try:
-        payload = jwt.decode(jwtoken, settings.SECRET_KEY, settings.ALOGRITHM)
+        payload = jost_jwt.decode(jwtoken, settings.SECRET_KEY, settings.ALOGRITHM)
         return payload
     except InvalidTokenError:
         return None
@@ -63,7 +63,7 @@ class JWTBearer(HTTPBearer):
         try:
             decodeJWT(jwtoken)
             return True
-        except jwt.ExpiredSignatureError:
+        except jost_jwt.ExpiredSignatureError:
             return False
-        except jwt.JWTError:
+        except jost_jwt.JWTError:
             return False
