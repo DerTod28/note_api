@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = Field(alias='POSTGRES_PASSWORD')
     POSTGRES_DB: str = Field(alias='POSTGRES_DB')
 
+    AUTHJWT_SECRET_KEY: str = Field(alias='AUTHJWT_SECRET_KEY')
+
     class Config:
         env_file = os.path.join(BASE_DIR, '.env')
         env_file_encoding = 'utf-8'

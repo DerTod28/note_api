@@ -28,11 +28,11 @@ line_code:
 
 # target: run - Run server
 run:
-	python3 manage.py runserver 0.0.0.0:8000
+	uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
 
 # target: mypy - Run static typing
 mypy:
-	mypy --config-file=mypy.ini app
+	mypy --config-file=mypy.ini app --no-incremental
 
 # target: pylint - Checks for errors, enforces a coding standard, looks for code smells.
 pylint:
@@ -40,7 +40,7 @@ pylint:
 
 # target: pep8 - Run code style test
 pep8:
-	flake8 app
+	flake8 app --config=setup.cfg
 
 # target: isort - Sorts imports
 isort:
