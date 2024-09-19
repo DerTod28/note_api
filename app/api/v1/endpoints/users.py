@@ -1,6 +1,5 @@
 import collections
 import uuid
-from typing import Any
 
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -8,6 +7,7 @@ from sqlalchemy import Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
+from app.models.api.v1.users import User
 from app.schemas.users import CurrentUser, UserCreate
 from app.services.users_service import UserService
 from app.utils.exceptions import ApiExceptionsError
@@ -35,13 +35,13 @@ async def create_user(
     return new_user
 
 
-# /users/me
+# /users/me - Текущий пользователь
 @router.get('/me', response_model=CurrentUser, description='Текущий пользователь - JWT TOKEN из /login')
 async def read_users_me(
     token: str = Depends(oauth2_scheme),
     current_user_uid: uuid.UUID = Depends(user_service.get_current_user_uid),
     session: AsyncSession = Depends(get_session),
-) -> Row[Any]:
+) -> Row[tuple[User, ...]]:
     """
     Get current user details
     """

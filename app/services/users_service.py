@@ -14,18 +14,18 @@ from app.utils.password_hash import hash_password
 
 
 class UserService:
-    async def get_all_users(self, session: AsyncSession) -> collections.abc.Sequence[Row[Any]]:
+    async def get_all_users(self, session: AsyncSession) -> collections.abc.Sequence[Row[tuple[User, Any]]]:
         statement = select(User)
         result = await session.execute(statement)
         return result.all()
 
-    async def get_user_by_uid(self, user_uid: uuid.UUID, session: AsyncSession) -> Row[Any]:
+    async def get_user_by_uid(self, user_uid: uuid.UUID, session: AsyncSession) -> Row[tuple[User, ...]]:
         statement = select(User).where(User.uid == user_uid)
         result = await session.execute(statement)
         user = result.scalar_one()
         return user if user is not None else None
 
-    async def get_user(self, username: str, session: AsyncSession) -> Optional[Any]:
+    async def get_user(self, username: str, session: AsyncSession) -> Optional[Row[tuple[User]]]:
         statement = select(User).where(User.username == username)
         result = await session.execute(statement)
         user = result.first()

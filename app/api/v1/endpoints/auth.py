@@ -16,6 +16,7 @@ router = APIRouter(
 auth_service = AuthService()
 
 
+# /api/v1/auth/login/ - Обмен логина/пароля на токены
 @router.post('/login')
 async def login(login_data: Login, session: AsyncSession = Depends(get_session)) -> dict[str, str]:
     user_verified = await auth_service.get_user_by_credentials(login_data, session)  # type: ignore[arg-type]

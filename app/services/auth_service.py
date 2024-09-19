@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Optional
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -9,7 +9,7 @@ from app.utils.password_hash import hash_password, verify_password
 
 
 class AuthService:
-    async def get_user_by_credentials(self, login_data: Login, session: AsyncSession) -> Any:
+    async def get_user_by_credentials(self, login_data: Login, session: AsyncSession) -> Optional[User]:
         user = None
         hashed_password = hash_password(login_data.password)
         if verify_password(login_data.password, hashed_password):
@@ -18,4 +18,4 @@ class AuthService:
             )
             result = await session.execute(statement)
             user = result.scalars().first()
-        return user if user else False
+        return user if user else None
