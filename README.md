@@ -14,6 +14,18 @@ Note api
     + [Testing](#testing)
 + [Management commands](#management-commands)
 
+```
+Список ручек:
+
+- api/v1/users/create - Регистрация нового пользователя
+- api/v1/auth/login - Выдача access token для последующих запросов
+- api/v1/users/me [+ access] - Информация о текущем пользователе
+- api/v1/notes/ [+ access] - Все заметки текущего пользователя
+- api/v1/notes/{note_uid} [+ access] - Данные по конкретной заметке
+- api/v1/notes/create [+ access] - Создание новой заметки. При сохранении запускается celery
+таска, которая при необходимости корректирует текст и сохраняет его после исправлений.
+  (после /notes/create можно взять uid записи и проверить результат Яндекс.Спелинга по запросу /notes/{note_uid})
+```
 ## About <a name = "about"></a>
 Note api backend server
 
