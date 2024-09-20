@@ -79,7 +79,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
  celery -A app worker -l INFO
 ```
 
-Server will start on localhost:8000
+Server will start on localhost:8001
 
 
 ## Command-helpers for local development <a name = "management-commands"></a>
