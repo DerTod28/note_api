@@ -2,9 +2,9 @@
 
 Note api
 
-![Документация](https://3.downloader.disk.yandex.com/preview/add1ba953b65165ae4ac45d41e77f4cbd2ab0e4a2db261ead5b993e6d600dfdd/inf/9RDZblOjIQZPbl839Sx7ksmfKtUilLChNzIdM1sO-9hbXBKf5w_AZGwFzI4QMqRxmC3sDfgcBOA90E4iT5WG5w%3D%3D?uid=1393619558&filename=%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-09-20%20%D0%B2%2003.07.52.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=1393619558&tknv=v2&size=2880x1558)
-Документация -
-http://127.0.0.1:8000/api/openapi#/
+Документация
+![Image alt](https://github.com/DerTod28/note_api/raw/main/documentation/images/01.png)
+
 
 ## Table of Contents
 + [About](#about)
