@@ -22,8 +22,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(alias='ACCESS_TOKEN_EXPIRE_MINUTES')
     REFRESH_TOKEN_EXPIRE_MINUTES: int = Field(alias='REFRESH_TOKEN_EXPIRE_MINUTES')
 
-    CELERY_HOST: str = Field(alias='CELERY_HOST', default='localhost')  # default
-    CELERY_PORT: str = Field(alias='CELERY_PORT', default=6379)  # default
+    CELERY_HOST: str = Field(alias='CELERY_HOST')
+    CELERY_PORT: str = Field(alias='CELERY_PORT')
 
     class Config:
         env_file = os.path.join(BASE_DIR, '.env')

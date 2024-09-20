@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./.ci/api/Dockerfile
+    container_name: fastapi_app
+    env_file: ".env.prod"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15.3-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
+    env_file: ".env.prod"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5442:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.0.11-alpine
+    restart: always
+    ports:
+      - "6388:6379"
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./.ci/api/Dockerfile
+    container_name: fastapi_app_worker
+    command:  celery -A app worker --loglevel=info
+    env_file: ".env.prod"
+    volumes:
+      - ./project:/usr/src/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_RESULT_BACKEND=redis://redis:6379
+    depends_on:
+      - fastapi
+      - redis
+
+volumes:
+  postgres_data:

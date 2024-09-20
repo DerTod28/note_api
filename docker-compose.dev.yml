@@ -1,16 +1,16 @@
 version: "3.8"
 
 services:
-  fastapi:
-    build:
-      context: .
-      dockerfile: ./.ci/api/Dockerfile
-    container_name: fastapi_app
-    env_file: ".env.prod"
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
+#  fastapi:
+#    build:
+#      context: .
+#      dockerfile: ./.ci/api/Dockerfile
+#    container_name: fastapi_app
+#    env_file: ".env"
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - db
 
   db:
     image: postgres:15.3-alpine
@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       DATABASE_URL: ${DATABASE_URL}
-    env_file: ".env.prod"
+    env_file: ".env"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -43,13 +43,13 @@ services:
 #      context: .
 #      dockerfile: ./.ci/api/Dockerfile
 #    container_name: fastapi_app_worker
-#    command: celery -A worker.celery worker --loglevel=info
-#    env_file: .env
+#    command:  celery -A app worker --loglevel=info
+#    env_file: ".env"
 #    volumes:
 #      - ./project:/usr/src/app
 #    environment:
-#      - CELERY_BROKER_URL=redis://redis:6388/0
-#      - CELERY_RESULT_BACKEND=redis://redis:6388/0
+#      - CELERY_BROKER_URL=redis://${CELERY_HOST}:${CELERY_PORT}
+#      - CELERY_RESULT_BACKEND=redis://${CELERY_HOST}:${CELERY_PORT}
 #    depends_on:
 #      - fastapi
 #      - redis
